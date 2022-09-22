@@ -50,6 +50,22 @@ Results:
 
 For your own setup, include the traefik configuration from  [docker-compose file](docker-compose.yaml):
 
+Choose to use the image you build yourself:
+
+```yaml
+traefik:
+    image: traefik-with-localhost-tls:2.8
+```
+
+or use my image from dockerhub:
+
+```yaml
+traefik:
+    image: avogt-sundn/traefik-with-localhost-tls:2.8
+```
+
+and continue with the configuration like so:
+
 ```yaml
 traefik:
     image: traefik-with-localhost-tls:2.8
