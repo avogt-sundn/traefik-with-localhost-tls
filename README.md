@@ -38,3 +38,46 @@ and also then:
     * <https://pgadmin.localhost.direct>
       * the tls certificate shows up left to the browser address bar as being valid (with a non-red/non-broken <i class='fas fa-lock'> </i> lock symbol
 
+## Traefik configuration
+
+The [docker-compose file](docker-compose.yaml) contains the needed configuration:
+
+```yaml
+traefik:
+    image: traefik-with-localhost-tls:2.8
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    command:
+      - --providers.file.filename=/traefik_conf.yml
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedbydefault=false
+      - --api
+      - --api.insecure=true
+      - --api.dashboard=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+```
+
+* there is no `build:` tag, which assumes the image has been build already and is available in the local docker registry
+
+## Further optimization
+
+You may want to remove the port 80 altogether to force use of the tls endpoint at all time during development:
+
+1. remove the `ports: -'80:80'`
+1. remove `- --entrypoints.web.address=:80`
+1. remove redirecting:
+
+    ```yaml
+     --entrypoints.web.http.redirections.entryPoint.to=websecure
+     --entrypoints.web.http.redirections.entryPoint.scheme=https
+    ```
