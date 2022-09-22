@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  default: 
+    name: ${DOCKER_NETWORK:-docker-default-network}
+    external: true
+
+services:
+
+  traefik:
+    build: .      
+    image: traefik-with-localhost-tls:2.8
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    command:
+      - --providers.file.filename=/traefik_conf.yml
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedbydefault=false
+      - --api
+      - --api.insecure=true
+      - --api.dashboard=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pgadmin.rule=Host(`pgadmin.localhost.direct`)'
+      - 'traefik.http.routers.pgadmin.entrypoints=web,websecure'
