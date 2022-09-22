@@ -89,3 +89,14 @@ You may want to remove the port 80 altogether to force use of the tls endpoint a
      --entrypoints.web.http.redirections.entryPoint.to=websecure
      --entrypoints.web.http.redirections.entryPoint.scheme=https
     ```
+
+## Building the image for Dockerhub
+
+Playing nicely for all the upcoming Apple Silicon users, I created the image as a [multi-arch](https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/) image.
+
+First, create a buildx builder with your local docker desktop, then run a multi-platform build and push to the existing repository on dockerhub registry:
+
+```bash
+docker buildx create --use
+docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag avogt/traefik-with-localhost-tls:2.8 .
+```
