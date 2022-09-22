@@ -1,17 +1,12 @@
 # Traefik Reverse Proxy with TLS running locally
 
-The Docker Compose file will create a reverse proxy with routing capabilities!
+Let's setup a local reverse proxy that does name-based virtual hosting, routing to docker containers and provides valid TLS out-of-the-box.
 
-* the [docker-compose file](docker-compose.yaml) is included in this project
+> Many thanks go to <https://get.localhost.direct/> for having registered the DNS wildcard and providing the matching TLS certificate on `*.localhost.direct`.
+>
+> Read their story over here <https://get.localhost.direct/> ..
 
-Results:
-
-* all containers get a dedicated hostname in a shared DNS domain
-* that domain can be resolved locally
-* port 80 redirects to port 443
-* port 443 servers TLS with a valid certificate from <https://localhost.direct>
-
-Usage:
+## Usage
 
 1. Build the image and start the traefik and the pgadmin containers from the example [docker-compose.yml](docker-compose.yaml)
 
@@ -38,9 +33,22 @@ and also then:
     * <https://pgadmin.localhost.direct>
       * the tls certificate shows up left to the browser address bar as being valid (with a non-red/non-broken <i class='fas fa-lock'> </i> lock symbol
 
-## Traefik configuration
+## What is happening
 
-The [docker-compose file](docker-compose.yaml) contains the needed configuration:
+The Docker Compose file will create a reverse proxy with routing capabilities!
+
+* the [docker-compose file](docker-compose.yaml) is included in this project
+
+Results:
+
+* all containers get a dedicated hostname in a shared DNS domain
+* that domain can be resolved on the host system
+* port 80 redirects to port 443
+* port 443 servers TLS with a valid certificate from <https://localhost.direct>
+
+## Setting up your own project
+
+For your own setup, include the traefik configuration from  [docker-compose file](docker-compose.yaml):
 
 ```yaml
 traefik:
