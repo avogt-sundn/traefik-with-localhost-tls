@@ -61,7 +61,7 @@ or use my image from dockerhub:
 
 ```yaml
 traefik:
-    image: avogt-sundn/traefik-with-localhost-tls:2.8
+    image: avogt/traefik-with-localhost-tls:2.8
 ```
 
 and continue with the configuration like so:
