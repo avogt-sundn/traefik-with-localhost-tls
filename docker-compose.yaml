@@ -1,15 +1,15 @@
 version: '3'
 
 networks:
-  default: 
+  default:
     name: ${DOCKER_NETWORK:-docker-default-network}
     external: true
 
 services:
 
   traefik:
-    build: .      
-    image: traefik-with-localhost-tls:2.8
+    build: .
+    image: traefik-with-localhost-tls:2.10
     ports:
       - '80:80'
       - '443:443'
@@ -29,7 +29,7 @@ services:
       - --api.dashboard=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  
+
   pgadmin:
     image: dpage/pgadmin4
     environment:

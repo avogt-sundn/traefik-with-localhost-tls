@@ -54,14 +54,14 @@ Choose to use the image you build yourself:
 
 ```yaml
 traefik:
-    image: traefik-with-localhost-tls:2.8
+    image: traefik-with-localhost-tls:2.10
 ```
 
 or use my image from dockerhub:
 
 ```yaml
 traefik:
-    image: avogt/traefik-with-localhost-tls:2.8
+    image: avogt/traefik-with-localhost-tls:2.10
 ```
 
 and continue with the configuration like so:
@@ -88,7 +88,7 @@ traefik:
       - --api.dashboard=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  
+
 ```
 
 * there is no `build:` tag, which assumes the image has been build already and is available in the local docker registry
@@ -112,7 +112,14 @@ Playing nicely for all the upcoming Apple Silicon users, I created the image as 
 
 First, create a buildx builder with your local docker desktop, then run a multi-platform build and push to the existing repository on dockerhub registry:
 
-```bash
-docker buildx create --use
-docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag avogt/traefik-with-localhost-tls:2.8 .
-```
+- create a buildx builder
+
+    ```bash
+    docker buildx create --use
+    ```
+
+- then build and push the image
+
+    ```bash
+    docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag avogt/traefik-with-localhost-tls:2.10 .
+    ```
